@@ -1,0 +1,166 @@
+- MongoDB uses collections and documents to store data.
+- A collection is a group of documents.
+- A document is a set of key-value pairs.
+
+- MongoDB is schema-less, meaning that you can store any kind of data in any document.
+- MongoDB is a NoSQL database, meaning that it does not use SQL to query data
+
+- MongoDB is a distributed database at its core, so high availability, horizontal scaling, and geographic distribution are built in and easy to use.
+
+    Ex of a document structure:
+    {
+        name: "John Doe",
+        age: 25,
+        status: "Single",
+        groups: ["Book Club", "Chess Club"]
+    }
+
+- We can also have nested documents:
+   
+    {
+        name: "John Doe",
+        age: 25,
+        status: "Single",
+        groups: ["Book Club", "Chess Club"],
+        address: {
+            street: "123 Main St",
+            city: "Springfield",
+            state: "IL",
+            zip: 62701
+        }
+    }
+
+- A database can have many collections, and a collection can have many documents.
+
+    Ex:
+    Database:
+        A
+        Collections:
+            - users:
+                document 1
+                document 2
+                document 3
+            - products
+            - orders
+            - reviews
+
+- The data in MongoDB is stored in BSON format, which is a binary representation of JSON.
+
+- When we fetch data from MongoDB, it is returned as JSON.
+
+- Every document in a collection has a unique _id field, which is a 12-byte hexadecimal number for identification.
+- This id is assigned by MongoDB itself
+
+- MongoDB compass is a GUI for visualizing and interacting with MongoDB data.
+- MongoDB Atlas is a cloud-based database service that allows you to easily deploy, manage, and scale MongoDB databases.
+
+- Clusters are groups of servers that store your data.
+- Clusters contains databases, which contain collections, which contain documents.
+- To connect to a MongoDB Compass cluster, we'll use a connection string that looks like this:
+    mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/<database-name>
+
+- If we use Atlas, we can get a connection string from the Atlas dashboard to use in compass.
+
+- MongoDB shell is a command-line interface for interacting with MongoDB.
+- In shell, we have following commands:
+
+1. show 'dbs' - shows all databases
+
+2. use 'db-name' - switch to a database
+    - If we use a database that doesn't exist, it will be created.
+
+3. show collections - shows all collfections in the current database
+
+4. We can also create variables and change them in the shell.
+    ex:     var name = "John"
+            name = "Jane"
+
+5. db.collectionName will give us the collection object, which we can use to perform operations on the collection.
+
+6. db.collectionName.insertOne({key: value}) - inserts a document in the collection
+    - If the collection doesn't exist, it will be created with a document inserted in it 
+
+7. db.collectionName.insertMany([{key: value}, {key: value}]) - inserts multiple documents in the collection ; Takes an array of objects
+
+    ex: .insertMany([{name: "John", age: 25}, {name: "Jane", age: 30}]) 
+
+8. db.collectionName.find() - returns the first 20 documents in the collection
+
+    .find({key: value}) - returns the documents that match the query
+
+9. db.createCollection('collectionName') - creates a new collection
+
+10. $lt : less than
+    $gt : greater than
+    $lte : less than or equal to
+    $gte : greater than or equal to
+    $eq : equal to
+    $ne : not equal to
+
+    ex: 
+        db.collectionName.find( { age: {$gt: 25} } ) - returns documents with age greater than 25
+        db.collectionName.find( { age: {$lt: 25, $gt: 20} } ) - returns documents with age less than 25 and greater than 20
+
+11. Logical Operators:
+    $and : and
+    $or : or
+    $not : not
+    $nor : nor
+
+    ex:
+        db.collectionName.find( { $and: [ { age: {$gt: 25} }, { name: "John" } ] } ) - returns documents with age greater than 25 and name John
+
+12. db.collectionName.insertOne({ key : [value1, value2] }) - inserts a document with an array as a value
+
+13. db.collectionName.find( { key: value1 } ) - returns documents with key having value1 in the array
+
+14. db.collectionName.updateOne( { key: value1 }, { $set: { key: value2 } } ) - updates the value of key from value1 to value2          // first argument is the query, second argument is the update  ;  db.collectionName.updateOne(query, update value)
+
+        If it matches multiple docs, it'll change the first doc only
+
+15. db.collectionName.updateMany( { key: value1 }, { $set: { key: value2 } } ) - updates the value of key from value1 to value2 in all the documents that match the query
+
+
+
+---> upsert : If the document doesn't exist, it'll create a new document with the query and update value
+
+    EX: db.collectionName.updateOne( { name: "John" }, { $set: { age: 30 } }, { upsert: true } ) - updates the age of John to 30, if John doesn't exist, it'll create a new document with name John and age 30
+
+
+
+*** Difference between upsert and insert ***
+- Upsert will update the document if it exists, otherwise it'll insert a new document
+- Insert will insert a new document only, it won't update the existing document
+
+
+
+16. db.collectionName.deleteOne( { key: value } ) - deletes the first document that matches the query
+
+17. db.collectionName.deleteMany( { key: value } ) - deletes all the documents that match the query
+
+
+
+
+        CONNECTING TO MONGODB USING NODE.JS
+
+        - We can connect to MongoDB using the MongoDB Node.js driver.
+        - We can install the driver using npm:
+            npm install mongodb
+        - We can connect to MongoDB using the MongoClient class from the driver.
+        - We can use the connect method of the MongoClient class to connect to MongoDB.
+
+        const connect = async () => {
+            try {
+                await MongoClient.connect('mongodb://localhost:27017');
+                console.log('Connected to MongoDB');
+            } 
+            catch (error) {
+                console.error('Error connecting to MongoDB', error);
+            }
+        }
+
+
+
+
+---> Mongoose expects us to define a schema (structure) of our collections
+
