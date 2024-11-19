@@ -110,6 +110,7 @@
     ex:
         db.collectionName.find( { $and: [ { age: {$gt: 25} }, { name: "John" } ] } ) - returns documents with age greater than 25 and name John
 
+
 12. db.collectionName.insertOne({ key : [value1, value2] }) - inserts a document with an array as a value
 
 13. db.collectionName.find( { key: value1 } ) - returns documents with key having value1 in the array
@@ -164,3 +165,21 @@
 
 ---> Mongoose expects us to define a schema (structure) of our collections
 
+- Schema refers to the structure/blueprint of a collection
+
+- Schemas are defined using the Schema class from the mongoose module
+
+- We can define a schema using the Schema class like this:
+
+    const schema = new mongoose.Schema({
+        key: value
+    });
+
+- We can create a model from a schema using the model method of the mongoose module
+
+- Models are used to interact with a collection in MongoDB
+
+    const Model = mongoose.model('Model', schema);
+
+    - On Creating a model, mongoose will create a collection with the name 'models' in the database
+     
