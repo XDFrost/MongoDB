@@ -1,7 +1,6 @@
 import SModel from "../models/StudentModel.js";
 import { generateToken } from "../utils/jwt.js";
 
-
 const getAll = async (req, res) => {
     try {
         const students = await SModel.find();
