@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import Testrouter from "./routes/student.js";
 import adminRouter from "./routes/adminRouter.js";
 import userRouter from "./routes/userRouter.js";
-// import bodyParser from "body-parser";
 
 dotenv.config();
 const app = express();
@@ -14,8 +13,11 @@ const app = express();
 connectDB();
 
 app.use(express.json());
-app.use(cors());
-// app.use(bodyParser.json());
+app.use(cors({
+    origin: process.env.ORIGINS.split(","),
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}));
+
 app.use("/api/test", Testrouter);
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
